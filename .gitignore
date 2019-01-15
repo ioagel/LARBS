@@ -1,1 +1,6 @@
-larbs_readme.pdf
+*
+!larbs.sh
+!LICENSE
+!progs.csv
+!README.md
+!testing/*
