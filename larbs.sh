@@ -118,7 +118,10 @@ putgitrepo() { # Downlods a gitrepo $1 and places the files in $2 only overwriti
 	chown -R "$name":wheel "$dir"
 	sudo -u "$name" git clone --depth 1 "$1" "$dir/gitrepo" >/dev/null 2>&1 &&
 	sudo -u "$name" mkdir -p "$2" &&
-	sudo -u "$name" cp -rfT "$dir"/gitrepo "$2"
+  if [ "$2" = "/home/$name" ]; then
+      cd "$2" && sudo -u "$name" git submodule update --init --recursive
+  fi
+  sudo -u "$name" cp -rfT "$dir"/gitrepo "$2"
 	}
 
 serviceinit() { for service in "$@"; do
@@ -143,9 +146,9 @@ finalize(){ \
 
 set_links() {
     if [ "$HOST_NAME" = 'erebus' ]; then
-        ln -sf /home/$user/.Xresources.macpro /home/$user/.Xresources
-        ln -sf /home/$user/.xinitrc.macpro /home/$user/.xinitrc
-        ln -sf /home/$user/.config/i3/config.macpro /home/$user/.config/i3/config
+        ln -sf "/home/$name/.Xresources.macpro" "/home/$name/.Xresources"
+        ln -sf "/home/$name/.xinitrc.macpro" "/home/$name/.xinitrc"
+        ln -sf "/home/$name/.config/i3/config.macpro" "/home/$name/.config/i3/config"
     fi
 }
 
@@ -207,9 +210,9 @@ putgitrepo "https://github.com/LukeSmithxyz/mozillarbs.git" "/home/$name/.mozill
 [ -f /usr/bin/pulseaudio ] && resetpulse
 
 # Install vim `plugged` plugins.
-dialog --infobox "Installing (neo)vim plugins..." 4 50
-(sleep 30 && killall nvim) &
-sudo -u "$name" nvim -E -c "PlugUpdate|visual|q|q" >/dev/null 2>&1
+# dialog --infobox "Installing (neo)vim plugins..." 4 50
+# (sleep 30 && killall nvim) &
+# sudo -u "$name" nvim -E -c "PlugUpdate|visual|q|q" >/dev/null 2>&1
 
 # Enable services here.
 serviceinit NetworkManager cronie
