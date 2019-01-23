@@ -17,6 +17,7 @@ esac done
 [ -z "$dotfilesrepo" ] && dotfilesrepo="https://github.com/ioagel/voidrice.git"
 [ -z "$progsfile" ] && progsfile="https://raw.githubusercontent.com/ioagel/LARBS/master/progs.csv"
 [ -z "$aurhelper" ] && aurhelper="yay"
+HOST_NAME=$(uname -n)
 
 ### FUNCTIONS ###
 
@@ -140,6 +141,14 @@ finalize(){ \
 	dialog --title "All done!" --msgbox "Congrats! Provided there were no hidden errors, the script completed successfully and all the programs and configuration files should be in place.\\n\\nTo run the new graphical environment, log out and log back in as your new user, then run the command \"startx\" to start the graphical environment (it will start automatically in tty1).\\n\\n.t Luke" 12 80
 	}
 
+set_links() {
+    if [ "$HOST_NAME" = 'erebus' ]; then
+        ln -sf /home/$user/.Xresources.macpro /home/$user/.Xresources
+        ln -sf /home/$user/.xinitrc.macpro /home/$user/.xinitrc
+        ln -sf /home/$user/.config/i3/config.macpro /home/$user/.config/i3/config
+    fi
+}
+
 ### THE ACTUAL SCRIPT ###
 
 ### This is how everything happens in an intuitive format and order.
@@ -212,6 +221,8 @@ systembeepoff
 # serveral important commands, `shutdown`, `reboot`, updating, etc. without a password.
 newperms "%wheel ALL=(ALL) ALL #LARBS
 %wheel ALL=(ALL) NOPASSWD: ALL"
+
+set_links
 
 # Last message! Install complete!
 finalize
