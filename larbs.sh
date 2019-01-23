@@ -146,9 +146,9 @@ finalize(){ \
 
 set_links() {
     if [ "$HOST_NAME" = 'erebus' ]; then
-        ln -sf "/home/$name/.Xresources.macpro" "/home/$name/.Xresources"
-        ln -sf "/home/$name/.xinitrc.macpro" "/home/$name/.xinitrc"
-        ln -sf "/home/$name/.config/i3/config.macpro" "/home/$name/.config/i3/config"
+        sudo -u "$name" ln -sf "/home/$name/.Xresources.macpro" "/home/$name/.Xresources"
+        sudo -u "$name" ln -sf "/home/$name/.xinitrc.macpro" "/home/$name/.xinitrc"
+        sudo -u "$name" ln -sf "/home/$name/.config/i3/config.macpro" "/home/$name/.config/i3/config"
     fi
 }
 
